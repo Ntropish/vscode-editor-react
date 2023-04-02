@@ -4,7 +4,9 @@ This is a template for making a VS Code editor in React. It's based on [generato
 
 ## Features
 
-Relative paths are used so that asset imports with Vite still work.
+The editor will open for files with a .chat extension.
+
+Relative paths are configured and used as part of a workaround so that asset imports with Vite still work.
 
 NPM Scripts and VS Code task/launch configuration has been updated. Run the watch script first. Then, run the launch configuration in the VS Code debugger.
 
