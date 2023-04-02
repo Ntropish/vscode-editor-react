@@ -1,7 +1,7 @@
 {
-  "name": "chat-completion",
-  "displayName": "chat-completion",
-  "description": "Adds an editor for chat files",
+  "name": "vscode-editor-react",
+  "displayName": "vscode-editor-react",
+  "description": "Adds a custom editor to VS Code",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.77.0"
