@@ -1,0 +1,43 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "tsc: build",
+      "type": "shell",
+      "command": "npm run tsc:build",
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "tsc: watch",
+      "type": "shell",
+      "command": "npm run tsc:watch",
+      "isBackground": true,
+      "problemMatcher": "$tsc-watch"
+    },
+    {
+      "label": "vite: build",
+      "type": "shell",
+      "command": "npm run vite:build"
+    },
+    {
+      "label": "vite: watch",
+      "type": "shell",
+      "command": "npm run vite:watch",
+      "isBackground": true
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "npm run build"
+    },
+    {
+      "label": "watch",
+      "type": "shell",
+      "command": "npm run watch",
+      "isBackground": true,
+      "problemMatcher": ["$tsc-watch"]
+    }
+  ]
+}
