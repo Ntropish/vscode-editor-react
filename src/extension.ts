@@ -82,19 +82,26 @@ class ChatCompletionEditorProvider implements vscode.CustomTextEditorProvider {
     const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}' ${webview.cspSource}; style-src ${webview.cspSource};">`;
     htmlContent = htmlContent.replace(/<head>/, `<head>${csp}`);
 
-    // Update the script and style source paths
-    htmlContent = htmlContent.replace(
-      /src="\//g,
-      `src="${webview.asWebviewUri(
-        vscode.Uri.joinPath(this._context.extensionUri, "dist", "vite")
-      )}/`
+    // // Update the script and style source paths
+    // htmlContent = htmlContent.replace(
+    //   /src="\//g,
+    //   `src="${webview.asWebviewUri(
+    //     vscode.Uri.joinPath(this._context.extensionUri, "dist", "vite")
+    //   )}/`
+    // );
+    // htmlContent = htmlContent.replace(
+    //   /href="\//g,
+    //   `href="${webview.asWebviewUri(
+    //     vscode.Uri.joinPath(this._context.extensionUri, "dist", "vite")
+    //   )}/`
+    // );
+
+    // Insert the base tag
+    const baseHref = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._context.extensionUri, "dist", "vite")
     );
-    htmlContent = htmlContent.replace(
-      /href="\//g,
-      `href="${webview.asWebviewUri(
-        vscode.Uri.joinPath(this._context.extensionUri, "dist", "vite")
-      )}/`
-    );
+    const baseTag = `<base href="${baseHref}/">`;
+    htmlContent = htmlContent.replace(/<head>/, `<head>${baseTag}`);
 
     // Add nonce to the script tags
     htmlContent = htmlContent.replace(/<script /g, `<script nonce="${nonce}" `);
