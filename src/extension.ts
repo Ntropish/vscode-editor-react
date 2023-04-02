@@ -39,6 +39,11 @@ class ChatCompletionEditorProvider implements vscode.CustomTextEditorProvider {
     webviewPanel: vscode.WebviewPanel,
     _token: vscode.CancellationToken
   ): Promise<void> {
+    // Setup initial content for the webview
+    webviewPanel.webview.options = {
+      enableScripts: true,
+    };
+
     // Set the webview's initial html content
     webviewPanel.webview.html = await this._getHtmlForWebview(
       webviewPanel.webview
@@ -70,29 +75,41 @@ class ChatCompletionEditorProvider implements vscode.CustomTextEditorProvider {
     );
     let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
 
+    // Generate a nonce
+    const nonce = this.getNonce();
+
     // Update the CSP
-    const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'unsafe-inline' ${webview.cspSource}; style-src ${webview.cspSource};">`;
+    const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}' ${webview.cspSource}; style-src ${webview.cspSource};">`;
     htmlContent = htmlContent.replace(/<head>/, `<head>${csp}`);
 
     // Update the script and style source paths
     htmlContent = htmlContent.replace(
       /src="\//g,
       `src="${webview.asWebviewUri(
-        vscode.Uri.file(
-          path.join(this._context.extensionPath, "dist", "vite", "assets")
-        )
+        vscode.Uri.joinPath(this._context.extensionUri, "dist", "vite")
       )}/`
     );
     htmlContent = htmlContent.replace(
       /href="\//g,
       `href="${webview.asWebviewUri(
-        vscode.Uri.file(
-          path.join(this._context.extensionPath, "dist", "vite", "assets")
-        )
+        vscode.Uri.joinPath(this._context.extensionUri, "dist", "vite")
       )}/`
     );
 
+    // Add nonce to the script tags
+    htmlContent = htmlContent.replace(/<script /g, `<script nonce="${nonce}" `);
+
     return htmlContent;
+  }
+
+  private getNonce() {
+    let text = "";
+    const possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < 32; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
   }
 }
 

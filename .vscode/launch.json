@@ -9,8 +9,7 @@
       "outFiles": [
         "${workspaceFolder}/dist/ts/**/*.js",
         "${workspaceFolder}/dist/vite/**/*.js"
-      ],
-      "preLaunchTask": "watch"
+      ]
     }
   ]
 }
